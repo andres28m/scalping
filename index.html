@@ -757,8 +757,12 @@
 
 function updateTradingSignals(sma, ema, rsi) {
             const signals = {
-                
-                "5m": 'Neutral'
+                "5m": 'Neutral',
+                "5m": 'Neutral',
+                "5m": 'Neutral',
+                "5": 'Neutral',
+                "5": 'Neutral',
+                "5": 'Neutral'
             };
         
             // Condiciones para actualizar las señales
@@ -787,6 +791,7 @@ function updateTradingSignals(sma, ema, rsi) {
                 return `<div class="signal ${signalClass}">${key}: ${signals[key]}</div>`;
             }).join('');
         }
+ 
  
 
         function updateChart(price) {
