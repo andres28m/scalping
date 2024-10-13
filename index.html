@@ -755,28 +755,39 @@
         }
         
 
-        function updateTradingSignals(sma, ema, rsi) {
+function updateTradingSignals(sma, ema, rsi) {
             const signals = {
                 
                 "5m": 'Neutral'
-   
             };
-
+        
+            // Condiciones para actualizar las señales
             if (rsi < 30 && ema > sma) {
-                signals["5m"] = 'StrongBuy';
-            } else if (rsi < 40 && ema > sma) {
+                signals["5m"] = 'Strong Buy';
+            }
+            if (rsi < 40 && ema > sma) {
                 signals["5m"] = 'Buy';
-            } else if (rsi > 60 && ema < sma) {
+            }
+            if (rsi > 60 && ema < sma) {
                 signals["5m"] = 'Sell';
-            } else if (rsi > 80 && ema < sma) {
-                signals["5m"] = 'StrongSell';
-            } 
-
+            }
+            if (rsi > 80 && ema < sma) {
+                signals["5m"] = 'Strong Sell';
+            }
+            if (rsi > 90 && ema < sma) {
+                signals["5m"] = 'Strong Sell';
+            }
+            if (rsi > 90 && ema < sma) {
+                signals["5m"] = 'Strong Sell';
+            }
+        
+            // Actualización del HTML con colores basados en las señales
             document.getElementById("signals").innerHTML = Object.keys(signals).map(key => {
-                const signalClass = signals[key].toLowerCase().replace(" ", "-");
+                const signalClass = signals[key].toLowerCase().replace(/ /g, "-");
                 return `<div class="signal ${signalClass}">${key}: ${signals[key]}</div>`;
             }).join('');
         }
+ 
 
         function updateChart(price) {
             if (!chartInstance) {
