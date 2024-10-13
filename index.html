@@ -764,22 +764,22 @@ function updateTradingSignals(sma, ema, rsi) {
             };
         
             // Condiciones para actualizar las señales
-            if (rsi > 30 && ema < sma) {
+            if (rsi < 30 && ema > sma) {
                 signals["5m"] = 'Strong Buy';
             }
-            if (rsi > 40 && ema < sma) {
+            if (rsi < 40 && ema > sma) {
                 signals["5m"] = 'Buy';
             }
-            if (rsi < 60 && ema > sma) {
+            if (rsi > 60 && ema < sma) {
                 signals["5m"] = 'Sell';
             }
-            if (rsi < 80 && ema > sma) {
+            if (rsi > 80 && ema < sma) {
                 signals["5m"] = 'Strong Sell';
             }
-            if (rsi < 90 && ema > sma) {
+            if (rsi > 90 && ema < sma) {
                 signals["5m"] = 'Strong Sell';
             }
-            if (rsi < 90 && ema > sma) {
+            if (rsi > 90 && ema < sma) {
                 signals["5m"] = 'Strong Sell';
             }
         
