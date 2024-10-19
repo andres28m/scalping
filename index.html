@@ -25,13 +25,13 @@
         }
 
         .container {
-           
+            text-align: center;
             max-width: 100%;
-            padding: 8px;
+            padding: 3px;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid #1b263b;
             border-radius: 15px;
-            box-shadow: 0px 0px 30px rgba(255, 9, 9, 0.7);
+            box-shadow: 0px 0px 30px rgba(9, 255, 255, 0.7);
         }
 
         h1, h2, h3 {
@@ -40,17 +40,17 @@
         }
          .input {
             width: 100%;
-            padding: 10px;
+            padding: 5px;
             background-color: #0e172a;
             border: 2px solid #09ffcf;
             color: #d4f1ff;
-            font-size: 16px;
+            font-size: 14px;
             border-radius: 10px;
             margin-bottom: 20px;
         }
-        .input-section, .result, .indicators, .movimiento, .market-hours {
-            margin-bottom: 20px;
-            padding: 20px;
+        .input-section, .result, .indicators, .signals, .movimiento, .market-hours {
+            margin-bottom: 10px;
+            padding: 5px;
             background-color: #2a2a2a;
             border: 1px solid #444;
             border-radius: 10px;
@@ -65,8 +65,8 @@
         }
 
         select, input, button {
-            margin: 10px 0;
-            padding: 10px;
+            margin: 5px 0;
+            padding: 5px;
             width: calc(100% - 22px);
             border: none;
             border-radius: 5px;
@@ -78,8 +78,8 @@
         }
         .btn {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #09ffcf, #f70505);
+            padding: 10px;
+            background: linear-gradient(45deg, #09ffcf, #0e72ec);
             color: #0a0f1e;
             font-size: 18px;
             font-family: 'Orbitron', sans-serif;
@@ -104,7 +104,7 @@
         
         .signals {
             max-width: 100%;
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             font-size: 18px;
             border: 1px solid #828181;
@@ -113,33 +113,49 @@
         }
         .signal {
             background-color: #2a2a2a; /* Color de fondo para las señales */
-            padding: 20px; /* Espaciado interno */
+            padding: 10px; /* Espaciado interno */
             border: 1px solid #828181; /* Borde */
             text-align: center; /* Centrar el texto */
              border-radius: 5px;
         }
-        #countdown, #orderBook, #prediction, #volume, #fibonacci, .subidas {
+        #countdown, #prediction, #volume, .subidas {
             margin-bottom: 3px;
-            margin-top: 10px;
+            margin-top: 3px;
             padding: 10px;
             text-align: center;
-            font-size: 18px;
+            font-size: 12px;
             border: 1px solid #444;
             border-radius: 5px;
             background-color: #2a2a2a;
         }
+    
+        #orderBook {
+            margin-bottom: 3px;
+            margin-top: 3px;
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+        }
+    
         .orderBook {
+            text-align: center;
             display: flex;
             justify-content: space-between;
             
         }
 
         .orderBook div {
+            
+            height: 40%;
             width: 48%;
         }
 
         #bids, #high {
             color: #4caf50;
+            
         }
 
         #asks, #low {
@@ -150,7 +166,7 @@
             margin-top: 10px;
             padding: 10px;
             text-align: center;
-            font-size: 25px;
+            font-size: 20px;
             border: 1px solid #444;
             border-radius: 5px;
             background-color: #2a2a2a;
@@ -162,7 +178,7 @@
             border-radius: 5px;
             background-color: #2a2a2a;
         }
-        .buy  {
+        .buy {
             color: #4caf50;
         }
         .sell, #countdown {
@@ -171,8 +187,8 @@
         .market-card {
             background-color: #333;
             border-radius: 10px;
-            padding: 15px;
-            margin: 10px;
+            padding: 3px;
+            margin: 3px;
             text-align: center;
             width: 100%;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -185,13 +201,13 @@
         }
 
         .market-card h4 {
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+            margin-bottom: 3px;
+            font-size: 14px;
             color: #00bcd4;
         }
 
         .market-card .market-status {
-            margin: 10px 0;
+            margin: 3px 0;
             font-size: 1.2rem;
         }
 
@@ -209,9 +225,9 @@
         }
 
         .market-icon {
-            font-size: 40px;
+            font-size: 16px;
             color: #00bcd4;
-            margin-bottom: 10px;
+            margin-bottom: 3px;
         }
 
         .market-hours {
@@ -223,14 +239,14 @@
         #market-hours-list {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-gap: 10px; /* Espacio entre elementos */
+            grid-gap: 3px; /* Espacio entre elementos */
             list-style-type: none; /* Quitar los puntos de la lista */
             padding: 0;
         }
 
         #market-hours-list li {
             text-align: center;
-            padding: 10px;
+            padding: 5px;
             border-radius: 5px;
         }
 
@@ -273,7 +289,7 @@
             font-weight: bold;
         }
 
-         /* Estilos CSS para las señales con colores */
+      /* Estilos CSS para las señales con colores */
 .signal.neutral {
     color: gray;
 }
@@ -291,6 +307,24 @@
     color: darkred;
     font-weight: bold;
 }
+#signals, .indicators {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 4 columnas iguales */
+    gap: 10px; /* Espacio entre las señales */
+    font-size: 12px;
+}
+.dos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 4 columnas iguales */
+    gap: 10px; /* Espacio entre las señales */
+}
+    
+.tiemp, .subidas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 4 columnas iguales */
+    gap: 10px; /* Espacio entre las señales */
+}
+
     </style>
     <style>
         body { font-family: Arial, sans-serif; }
@@ -301,7 +335,7 @@
 </head>
 <body>
     <div class="container">
-       
+        <div class="dos">
         <select id="coin" class="input">
             <option value="BTCUSDT">Bitcoin (BTC/USDT)</option>
             <option value="ETHUSDT">Ethereum (ETH/USDT)</option>
@@ -317,6 +351,7 @@
             <option value="WIFUSDT">WIF (WIF/USDT)</option>
             <option value="SUPERUSDT">SUPER (SUPER/USDT)</option>
             <option value="UNIUSDT">UNI Coin (UNI/USDT)</option>
+            <option value="ARKUSDT">ARK (ARK/USDT)</option>
             <option value="LQTYUSDT">LQTY (LQTY/USDT)</option>
             <option value="REEFUSDT">REEF (REEF/USDT)</option>
             <option value="DOGSUSDT">DOGS (DOGS/USDT)</option>
@@ -326,10 +361,15 @@
         </select>
 
         <select id="interval" class="input">
-            
+            <option value="1m">1 minuto</option>
+            <option value="5m">5 minutos</option>
             <option value="15m">15 minutos</option>
+            <option value="1h">1 hora</option>
+            <option value="4h">4 horas</option>
+            <option value="1d">1 día</option>
             
         </select>
+        </div>
         <button class="btn" id="fetchDataBtn" onclick="startFetching()">Comenzar Análisis</button>
 
         
@@ -341,19 +381,24 @@
             <div id="price">Precio actual: Cargando...</div>
 
             <div id="prediction">Predicción: Cargando...</div>
-            <br>
-            <div class="signals" id="signals">Señales: Cargando...</div>
-            
-          <div class="subidas">
-            <div id="high">Máximo: Cargando...</div>
-            <div id="low">Mínimo: Cargando...</div>
-          </div>
-            <div id="volume">Volumen en 24h: Cargando...</div>
 
+          
+            <div class="signals" id="signals">Señales: Cargando...</div>
+            <!--
             <div class="orderBook" id="orderBook">
                 <div id="bids">Órdenes de Compra: Cargando...</div>
                 <div id="asks">Órdenes de Venta: Cargando...</div>
             </div>
+            -->
+            <div class="subidas">
+                <div id="low">Mínimo: Cargando...</div>
+                <div id="high">Máximo: Cargando...</div>
+                
+            </div>
+
+            <div id="volume">Volumen en 24h: Cargando...</div>
+            
+            <canvas id="chart"></canvas>
         </div>
 
         
@@ -367,9 +412,8 @@
                
         </div>
 
-
-        <br>
-        <canvas id="chart"></canvas>
+        
+        
 
        
         <div class="input-section">
@@ -388,6 +432,7 @@
                 <option value="WIFUSDT">WIF (WIF/USDT)</option>
                 <option value="SUPERUSDT">SUPER (SUPER/USDT)</option>
                 <option value="UNIUSDT">UNI Coin (UNI/USDT)</option>
+                <option value="ARKUSDT">ARK (ARK/USDT)</option>
                 <option value="LQTYUSDT">LQTY (LQTY/USDT)</option>
                 <option value="REEFUSDT">REEF (REEF/USDT)</option>
                 <option value="DOGSUSDT">DOGS (DOGS/USDT)</option>
@@ -395,8 +440,12 @@
                 <option value="SHIBUSDT">SHIBCoin (SHIB/USDT)</option>
                 <option value="ZETAUSDT">ZETA Coin (ZETA/USDT)</option>
             </select>
+            
+            <div class="tiemp">
             <input class="input" type="date" id="fechaInicio" placeholder="Fecha Inicio" required>
             <input class="input" type="date" id="fechaFin" placeholder="Fecha Fin" required>
+            </div>
+            
             <button class="btn" id="calcular">Calcular Movimientos</button>
         </div>
 
@@ -412,7 +461,7 @@
         </div>
 
         <br>
-        
+    
      </div>  
 
     </div>
@@ -491,7 +540,7 @@
                   // Ajustar el número de decimales según la moneda
                 const decimalPlaces = (coin === "FTMUSDT" || coin === "POPCATUSDT" || coin === "LQTYUSDT" || coin === "DOGSUSDT"|| coin === "TONUSDT"|| coin === "SHIBUSDT" || coin === "DOGEUSDT") ? 4 : 2;
         
-                document.getElementById("price").innerText = `Precio actual: $${parseFloat(data.price).toFixed(decimalPlaces)}`;
+                document.getElementById("price").innerText = `Precio actual: $${parseFloat(data.price).toFixed(4)}`;
                 updateChart(parseFloat(data.price));
             } catch (error) {
                 console.error("Error:", error);
@@ -537,9 +586,9 @@
                 const low = Math.min(...historicalPrices);
                 const volume = data.reduce((acc, item) => acc + parseFloat(item[5]), 0); // Volumen en 24h
 
-                document.getElementById("high").innerText = `Máximo: $${high.toFixed(decimalPlaces)}`;
-                document.getElementById("low").innerText = `Mínimo: $${low.toFixed(decimalPlaces)}`;
-                document.getElementById("volume").innerText = `Volumen en 24h: ${volume.toFixed(decimalPlaces)}`;
+                document.getElementById("high").innerText = `Máximo: $${high.toFixed(4)}`;
+                document.getElementById("low").innerText = `Mínimo: $${low.toFixed(4)}`;
+                document.getElementById("volume").innerText = `Volumen en 24h: ${volume.toFixed(4)}`;
 
                 // Calcular indicadores si hay suficientes datos
                 const sma = calculateSMA(historicalPrices, 14);
@@ -550,12 +599,12 @@
                 const fibonacci = calculateFibonacci(historicalPrices);
 
                 // Mostrar indicadores si no son null
-                if (sma !== null) document.getElementById("sma").innerText = `SMA: $${sma.toFixed(decimalPlaces)}`;
-                if (ema !== null) document.getElementById("ema").innerText = `EMA: $${ema.toFixed(decimalPlaces)}`;
-                if (rsi !== null) document.getElementById("rsi").innerText = `RSI: ${rsi.toFixed(decimalPlaces)}`;
-                if (macd !== null) document.getElementById("macd").innerText = `MACD: ${macd.toFixed(decimalPlaces)}`;
+                if (sma !== null) document.getElementById("sma").innerText = `SMA: $${sma.toFixed(4)}`;
+                if (ema !== null) document.getElementById("ema").innerText = `EMA: $${ema.toFixed(4)}`;
+                if (rsi !== null) document.getElementById("rsi").innerText = `RSI: ${rsi.toFixed(4)}`;
+                if (macd !== null) document.getElementById("macd").innerText = `MACD: ${macd.toFixed(4)}`;
                 if (bollinger !== null) {
-                    document.getElementById("bollinger").innerText = `Bandas de Bollinger: $${bollinger.upper.toFixed(decimalPlaces)} / $${bollinger.lower.toFixed(decimalPlaces)}`;
+                    document.getElementById("bollinger").innerText = `Bandas de Bollinger: $${bollinger.upper.toFixed(4)} / $${bollinger.lower.toFixed(4)}`;
                 }
                 document.getElementById("fibonacci").innerText = `Fibonacci: ${fibonacci.join(', ')}`;
 
@@ -601,7 +650,7 @@
                 document.getElementById("news").innerText = 'Error al cargar noticias. Por favor, intenta nuevamente más tarde.';
             }
         }
-
+        
         function calculateSMA(data, period) {
             if (data.length >= period) {
                 const sum = data.slice(-period).reduce((a, b) => a + b, 0);
@@ -727,54 +776,48 @@
                 return 'neutral';
             }
         }
-
+        
         function predictMarket(newsImpact, sma, ema, rsi, macd) {
             let prediction = "Tendencia neutra.";
-        
-            // Si no hay impacto de noticias, solo se considera los indicadores
-            if (!newsImpact) {
-                if (sma > ema && rsi < 70 && macd > 0) {
-                    prediction = "Tendencia alcista.";
-                } else if (sma < ema && rsi > 30 && macd < 0) {
-                    prediction = "Tendencia bajista.";
-                }
-            } else {
-                // Considerar impacto de noticias
-                if (newsImpact === "positivo" && sma > ema && rsi < 70 && macd > 0) {
-                    prediction = "Tendencia alcista.";
-                } else if (newsImpact === "negativo" && sma < ema && rsi > 30 && macd < 0) {
-                    prediction = "Tendencia bajista.";
-                }
+            
+            if (newsImpact === "positivo" && sma > ema && rsi > 50 && macd > 0) {
+                prediction = "Tendencia alcista.";
+            } else if (newsImpact === "negativo" && sma < ema && rsi < 50 && macd < 0) {
+                prediction = "Tendencia bajista.";
             }
             
             return `Predicción del mercado: ${prediction}`;
         }
         
 
-function updateTradingSignals(sma, ema, rsi) {
+        function updateTradingSignals(sma, ema, rsi) {
             const signals = {
-                
-                "15m": 'Neutral'
+                "1m": 'Neutral',
+                "5m": 'Neutral',
+                "15m": 'Neutral',
+                "1h": 'Neutral',
+                "4h": 'Neutral',
+                "1d": 'Neutral'
             };
         
             // Condiciones para actualizar las señales
             if (rsi < 30 && ema > sma) {
-                signals["15m"] = 'Strong Buy';
+                signals["1m"] = 'Strong Buy';
             }
             if (rsi < 40 && ema > sma) {
-                signals["15m"] = 'Buy';
+                signals["5m"] = 'Buy';
             }
             if (rsi > 60 && ema < sma) {
                 signals["15m"] = 'Sell';
             }
             if (rsi > 80 && ema < sma) {
-                signals["15m"] = 'Strong Sell';
+                signals["1h"] = 'Strong Sell';
             }
             if (rsi > 90 && ema < sma) {
-                signals["15m"] = 'Strong Sell';
+                signals["4h"] = 'Strong Sell';
             }
             if (rsi > 90 && ema < sma) {
-                signals["15m"] = 'Strong Sell';
+                signals["1d"] = 'Strong Sell';
             }
         
             // Actualización del HTML con colores basados en las señales
@@ -783,8 +826,8 @@ function updateTradingSignals(sma, ema, rsi) {
                 return `<div class="signal ${signalClass}">${key}: ${signals[key]}</div>`;
             }).join('');
         }
- 
- 
+        
+        
 
         function updateChart(price) {
             if (!chartInstance) {
@@ -838,8 +881,8 @@ function updateTradingSignals(sma, ema, rsi) {
             }
 
             // Aquí puedes agregar SMA y EMA a la gráfica
-            const smaValue = calculateSMA(historicalPrices, 7);
-            const emaValue = calculateEMA(historicalPrices, 7);
+            const smaValue = calculateSMA(historicalPrices, 14);
+            const emaValue = calculateEMA(historicalPrices, 14);
             chartInstance.data.datasets[1].data.push(smaValue);
             chartInstance.data.datasets[2].data.push(emaValue);
 
@@ -852,7 +895,7 @@ function updateTradingSignals(sma, ema, rsi) {
                 const coin = document.getElementById("coin").value;
                 fetchCurrentPrice(coin);
                 fetchOrderBook(coin);
-            }, 10000); // Actualiza cada 10 segundos
+            }, 5000); // Actualiza cada 5 segundos
         }
 
         function startCountdown() {
@@ -881,7 +924,6 @@ function updateTradingSignals(sma, ema, rsi) {
         });
         
     </script>
-
      <script>
         async function obtenerDatosHistoricos(cripto, intervalo, fechaInicio, fechaFin) {
             const url = `https://api.binance.com/api/v3/klines?symbol=${cripto}&interval=${intervalo}&startTime=${fechaInicio}&endTime=${fechaFin}&limit=1000`;
@@ -1007,3 +1049,8 @@ function updateTradingSignals(sma, ema, rsi) {
     </script>
 </body>
 </html>
+
+
+
+
+
