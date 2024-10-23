@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predicción de Mercado con ML Pro</title>
+    <title>PMMLPro</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
          @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500&display=swap');
@@ -118,7 +118,7 @@
             text-align: center; /* Centrar el texto */
              border-radius: 5px;
         }
-        #countdown, #prediction, #volume, .subidas {
+        #prediction, #choch, #volume, .subidas {
             margin-bottom: 3px;
             margin-top: 3px;
             padding: 10px;
@@ -161,12 +161,12 @@
         #asks, #low {
             color: #f44336;
         }
-        #price {
+        #price, #countdown {
             margin-bottom: 3px;
             margin-top: 10px;
             padding: 10px;
             text-align: center;
-            font-size: 20px;
+            font-size: 14px;
             border: 1px solid #444;
             border-radius: 5px;
             background-color: #2a2a2a;
@@ -325,6 +325,8 @@
     gap: 10px; /* Espacio entre las señales */
 }
 
+
+
     </style>
     <style>
         body { font-family: Arial, sans-serif; }
@@ -335,7 +337,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="dos">
+    <div class="dos">
         <select id="coin" class="input">
             <option value="BTCUSDT">Bitcoin (BTC/USDT)</option>
             <option value="ETHUSDT">Ethereum (ETH/USDT)</option>
@@ -351,7 +353,6 @@
             <option value="WIFUSDT">WIF (WIF/USDT)</option>
             <option value="SUPERUSDT">SUPER (SUPER/USDT)</option>
             <option value="UNIUSDT">UNI Coin (UNI/USDT)</option>
-            <option value="ARKUSDT">ARK (ARK/USDT)</option>
             <option value="LQTYUSDT">LQTY (LQTY/USDT)</option>
             <option value="REEFUSDT">REEF (REEF/USDT)</option>
             <option value="DOGSUSDT">DOGS (DOGS/USDT)</option>
@@ -359,7 +360,6 @@
             <option value="SHIBUSDT">SHIBCoin (SHIB/USDT)</option>
             <option value="ZETAUSDT">ZETA Coin (ZETA/USDT)</option>
         </select>
-
         <select id="interval" class="input">
             <option value="1m">1 minuto</option>
             <option value="5m">5 minutos</option>
@@ -370,20 +370,29 @@
             
         </select>
         </div>
+
         <button class="btn" id="fetchDataBtn" onclick="startFetching()">Comenzar Análisis</button>
 
-        
 
-        <div id="loader">Cargando...</div>
-        <div id="countdown">Próxima solicitud en: 0 segundos</div>
 
         <div class="result" id="result">
-            <div id="price">Precio actual: Cargando...</div>
+            <div class="dos">
+            <div id="price">Precio: Cargando...</div>
+            <div id="loader">Cargando...</div>
+            <div id="countdown">Tiempo: 0 segundos</div>
+            </div>
+
+            <!-- Contenedor para el widget de TradingView -->
+            <div id="tradingview_widget_container" style="width: 100%; height: 250px;"></div>
 
             <div id="prediction">Predicción: Cargando...</div>
-
-          
+            <div id="choch">CHoCH: ---</div>
+            
+     
             <div class="signals" id="signals">Señales: Cargando...</div>
+            
+            
+            
             <!--
             <div class="orderBook" id="orderBook">
                 <div id="bids">Órdenes de Compra: Cargando...</div>
@@ -397,6 +406,7 @@
             </div>
 
             <div id="volume">Volumen en 24h: Cargando...</div>
+            
             
             <canvas id="chart"></canvas>
         </div>
@@ -466,18 +476,67 @@
 
     </div>
 
+    <script>
+        // Inicializa el widget de TradingView
+        let tvWidget;
+    
+        function createTradingViewWidget(symbol) {
+            // Si el widget ya existe, lo destruimos para crear uno nuevo
+            if (tvWidget) {
+                tvWidget.remove();
+            }
+    
+            // Creamos el nuevo widget de TradingView
+            tvWidget = new TradingView.widget({
+                "symbol": `PIONEX:${symbol}.P`,  // Símbolo dinámico
+                "container_id": "tradingview_widget_container",
+                "width": "100%",
+                "height": "250",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "range": "YTD",
+                "hide_side_toolbar": true,
+                "details": true,
+                "hotlist": true,
+                "calendar": false,
+                "autosize": true,
+                "studies": ["MASimple@tv-basicstudies"]
+            });
+        }
+    
+        // Evento al cambiar el selector de moneda
+        document.getElementById('coin').addEventListener('change', function() {
+            const selectedSymbol = this.value;  // Obtener el valor seleccionado
+            createTradingViewWidget(selectedSymbol);  // Crear el widget con el nuevo símbolo
+        });
+    
+        // Cargar el gráfico inicial (Bitcoin)
+        window.onload = function() {
+            createTradingViewWidget('BTCUSDT');  // Cargar BTC como inicial
+        };
+    </script>
+    
+    <!-- Script de TradingView para el widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
      <script>
         // Funciones de almacenamiento de preferencias
         function saveUserPreferences() {
             const coin = document.getElementById("coin").value;
             const interval = document.getElementById("interval").value;
+            
+            
             localStorage.setItem("selectedCoin", coin);
             localStorage.setItem("selectedInterval", interval);
+            
         }
 
         function loadUserPreferences() {
             const savedCoin = localStorage.getItem("selectedCoin");
             const savedInterval = localStorage.getItem("selectedInterval");
+            
 
             if (savedCoin) {
                 document.getElementById("coin").value = savedCoin;
@@ -485,30 +544,12 @@
             if (savedInterval) {
                 document.getElementById("interval").value = savedInterval;
             }
+            
         }
 
+
+        
        
-        // Funciones de notificaciones
-        function requestNotificationPermission() {
-            if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission !== "granted") {
-                        console.log("Permiso de notificación denegado");
-                    }
-                });
-            }
-        }
-
-        function showNotification(title, message) {
-            if (Notification.permission === "granted") {
-                new Notification(title, {
-                    body: message,
-                    icon: "https://example.com/icon.png" // Cambia el ícono si lo deseas
-                });
-            }
-        }
-
-
         let historicalPrices = [];
         let chartInstance;
         const requestInterval = 61; // Intervalo de 61 segundos
@@ -519,6 +560,8 @@
             fetchMarketData();
             startRealTimeUpdates();
             startCountdown();
+            checkCHoCH();
+            
         }
 
         async function fetchMarketData() {
@@ -527,6 +570,7 @@
             await fetchOrderBook(coin);
             await updateIndicators();
             await fetchNews(); // Cargar noticias
+            await checkCHoCH();
         }
 
         async function fetchCurrentPrice(coin) {
@@ -537,11 +581,16 @@
                 if (!response.ok) throw new Error(`Error en la API: ${response.statusText}`);
                 const data = await response.json();
 
-                  // Ajustar el número de decimales según la moneda
+                // Ajustar el número de decimales según la moneda
                 const decimalPlaces = (coin === "FTMUSDT" || coin === "POPCATUSDT" || coin === "LQTYUSDT" || coin === "DOGSUSDT"|| coin === "TONUSDT"|| coin === "SHIBUSDT" || coin === "DOGEUSDT") ? 4 : 2;
-        
-                document.getElementById("price").innerText = `Precio actual: $${parseFloat(data.price).toFixed(4)}`;
+
+                const currentPrice = parseFloat(data.price).toFixed(4);
+                document.getElementById("price").innerText = `Precio actual: $${currentPrice}`;
                 updateChart(parseFloat(data.price));
+
+                // Verificar CHoCH
+                checkCHoCH(historicalPrices, parseFloat(data.price));
+
             } catch (error) {
                 console.error("Error:", error);
             }
@@ -568,7 +617,7 @@
             }
         }
 
-       async function updateIndicators() {
+        async function updateIndicators() {
             const coin = document.getElementById("coin").value;
             const interval = document.getElementById("interval").value;
             const apiURL = `https://api.binance.com/api/v3/klines?symbol=${coin}&interval=${interval}&limit=100`;
@@ -577,8 +626,6 @@
                 const response = await fetch(apiURL);
                 if (!response.ok) throw new Error(`Error en la API: ${response.statusText}`);
                 const data = await response.json();
-
-                const decimalPlaces = (coin === "FTMUSDT" || coin === "POPCATUSDT" || coin === "LQTYUSDT" || coin === "DOGSUSDT" || coin === "TONUSDT" || coin === "SHIBUSDT" || coin === "DOGEUSDT") ? 4 : 2;
 
                 historicalPrices = data.map(item => parseFloat(item[4])); // Precio de cierre
 
@@ -589,6 +636,7 @@
                 document.getElementById("high").innerText = `Máximo: $${high.toFixed(4)}`;
                 document.getElementById("low").innerText = `Mínimo: $${low.toFixed(4)}`;
                 document.getElementById("volume").innerText = `Volumen en 24h: ${volume.toFixed(4)}`;
+
 
                 // Calcular indicadores si hay suficientes datos
                 const sma = calculateSMA(historicalPrices, 14);
@@ -620,6 +668,7 @@
                 console.error("Error:", error);
             }
         }
+
 
         async function fetchNews() {
             const newsApiKey = '6b7b0f8817d34d31b6cb59a8c7e40e54'; // Cambia esta clave si es necesario
@@ -737,6 +786,72 @@
             ];
         }
 
+        // Función para calcular el RSI
+function calculateRSI(prices, period = 14) {
+    let gains = 0;
+    let losses = 0;
+    let avgGain, avgLoss;
+
+    // Calcular cambios de precios
+    for (let i = 1; i < prices.length; i++) {
+        const change = prices[i] - prices[i - 1];
+        if (change > 0) {
+            gains += change;
+        } else {
+            losses -= change; // Convertir pérdidas a valores positivos
+        }
+    }
+
+    // Promedios
+    avgGain = gains / period;
+    avgLoss = losses / period;
+
+    // Calcular el RS
+    const rs = avgGain / avgLoss;
+    
+    // Calcular el RSI
+    return 100 - (100 / (1 + rs));
+}
+
+// Función principal para comprobar CHoCH
+function checkCHoCH(historicalPrices, currentPrice) {
+    if (historicalPrices.length < 14) return; // Asegurar que haya suficientes datos para el RSI
+
+    const prevPrice = historicalPrices[historicalPrices.length - 2];
+    const prevLow = Math.min(...historicalPrices.slice(-3));
+    const prevHigh = Math.max(...historicalPrices.slice(-3));
+
+    // Calcular RSI
+    const rsi = calculateRSI(historicalPrices.slice(-14)); // Usamos los últimos 14 precios para el RSI
+
+    let chochSignal = "Neutro";
+
+    // Condición CHoCH para cambio de alcista a bajista
+    if (prevPrice > prevHigh && currentPrice < prevLow) {
+        chochSignal = "CHoCH detectado: Cambio a tendencia bajista.";
+        
+        // Añadir condición de sobrecompra
+        if (rsi > 70) {
+            chochSignal += " (RSI indica sobrecompra)";
+        }
+    }
+    // Condición CHoCH para cambio de bajista a alcista
+    else if (prevPrice < prevLow && currentPrice > prevHigh) {
+        chochSignal = "CHoCH detectado: Cambio a tendencia alcista.";
+        
+        // Añadir condición de sobreventa
+        if (rsi < 30) {
+            chochSignal += " (RSI indica sobreventa)";
+        }
+    }
+
+    if (chochSignal) {
+        document.getElementById("choch").innerText = chochSignal;
+    }
+}
+
+
+
         async function analyzeNews() {
             const newsApiKey = '6b7b0f8817d34d31b6cb59a8c7e40e54'; // Cambia esta clave si es necesario
             const newsApiURL = `https://newsapi.org/v2/everything?q=cryptocurrency&from=2024-10-01&apiKey=${newsApiKey}`;
@@ -786,7 +901,7 @@
                 prediction = "Tendencia bajista.";
             }
             
-            return `Predicción del mercado: ${prediction}`;
+            return `Predicción : ${prediction}`;
         }
         
 
@@ -902,7 +1017,7 @@
             let countdown = requestInterval;
             countdownTimer = setInterval(() => {
                 countdown--;
-                document.getElementById("countdown").innerText = `Próxima solicitud en: ${countdown} segundos`;
+                document.getElementById("countdown").innerText = `Tiempo: ${countdown} segundos`;
                 if (countdown <= 0) {
                     clearInterval(countdownTimer);
                     fetchMarketData(); // Llama a la función para obtener datos al terminar el countdown
@@ -915,7 +1030,6 @@
         document.getElementById("startButton").addEventListener("click", function() {
             saveUserPreferences(); // Guarda preferencias
             fetchMarketData(); // Obtiene datos del mercado
-            // Aquí podrías agregar lógica para actualizaciones en tiempo real o countdown
         });
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -924,6 +1038,7 @@
         });
         
     </script>
+
      <script>
         async function obtenerDatosHistoricos(cripto, intervalo, fechaInicio, fechaFin) {
             const url = `https://api.binance.com/api/v3/klines?symbol=${cripto}&interval=${intervalo}&startTime=${fechaInicio}&endTime=${fechaFin}&limit=1000`;
@@ -982,7 +1097,7 @@
                     li.innerHTML = `
                         Intervalo ${mov.intervalo}:<br>
                         Max: <span class="precio-maximo">${mov.maximo.toFixed(5)}</span><br>
-                        Precio Actual: <span class="precio-actual">${precioActual.toFixed(5)}</span><br>
+                        Precio: <span class="precio-actual">${precioActual.toFixed(5)}</span><br>
                         Min: <span class="precio-minimo">${mov.minimo.toFixed(5)}</span><br>
                         % Desde el Mínimo: <span class="precio-minimo">${mov.porcentajeDesdeMinimo}%</span><br>
                         % Desde el Máximo: <span class="precio-maximo">${mov.porcentajeDesdeMaximo}%</span>
@@ -1047,6 +1162,8 @@
             mostrarHorariosMercados(); // Cargar horarios al inicio
         });
     </script>
+
+    
 </body>
 </html>
 
