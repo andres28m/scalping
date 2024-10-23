@@ -118,7 +118,7 @@
             text-align: center; /* Centrar el texto */
              border-radius: 5px;
         }
-        #prediction, #choch, #volume, .subidas {
+        #prediction, #volume, .subidas {
             margin-bottom: 3px;
             margin-top: 3px;
             padding: 10px;
@@ -325,7 +325,13 @@
     gap: 10px; /* Espacio entre las señales */
 }
 
-
+/* Estilos para cada widget */
+#tradingview_widget_container {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border: none;
+}
 
     </style>
     <style>
@@ -383,16 +389,12 @@
             </div>
 
             <!-- Contenedor para el widget de TradingView -->
-            <div id="tradingview_widget_container" style="width: 100%; height: 250px;"></div>
+            <div id="tradingview_widget_container" style="width: 100%; height: 300px;"></div>
 
             <div id="prediction">Predicción: Cargando...</div>
-            <div id="choch">CHoCH: ---</div>
-            
-     
+
+          
             <div class="signals" id="signals">Señales: Cargando...</div>
-            
-            
-            
             <!--
             <div class="orderBook" id="orderBook">
                 <div id="bids">Órdenes de Compra: Cargando...</div>
@@ -406,7 +408,6 @@
             </div>
 
             <div id="volume">Volumen en 24h: Cargando...</div>
-            
             
             <canvas id="chart"></canvas>
         </div>
@@ -491,7 +492,7 @@
                 "symbol": `PIONEX:${symbol}.P`,  // Símbolo dinámico
                 "container_id": "tradingview_widget_container",
                 "width": "100%",
-                "height": "250",
+                "height": "300",
                 "timezone": "Etc/UTC",
                 "theme": "dark",
                 "style": "1",
@@ -526,17 +527,13 @@
         function saveUserPreferences() {
             const coin = document.getElementById("coin").value;
             const interval = document.getElementById("interval").value;
-            
-            
             localStorage.setItem("selectedCoin", coin);
             localStorage.setItem("selectedInterval", interval);
-            
         }
 
         function loadUserPreferences() {
             const savedCoin = localStorage.getItem("selectedCoin");
             const savedInterval = localStorage.getItem("selectedInterval");
-            
 
             if (savedCoin) {
                 document.getElementById("coin").value = savedCoin;
@@ -544,12 +541,30 @@
             if (savedInterval) {
                 document.getElementById("interval").value = savedInterval;
             }
-            
+        }
+
+       
+        // Funciones de notificaciones
+        function requestNotificationPermission() {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission !== "granted") {
+                        console.log("Permiso de notificación denegado");
+                    }
+                });
+            }
+        }
+
+        function showNotification(title, message) {
+            if (Notification.permission === "granted") {
+                new Notification(title, {
+                    body: message,
+                    icon: "https://example.com/icon.png" // Cambia el ícono si lo deseas
+                });
+            }
         }
 
 
-        
-       
         let historicalPrices = [];
         let chartInstance;
         const requestInterval = 61; // Intervalo de 61 segundos
@@ -560,8 +575,6 @@
             fetchMarketData();
             startRealTimeUpdates();
             startCountdown();
-            checkCHoCH();
-            
         }
 
         async function fetchMarketData() {
@@ -570,7 +583,6 @@
             await fetchOrderBook(coin);
             await updateIndicators();
             await fetchNews(); // Cargar noticias
-            await checkCHoCH();
         }
 
         async function fetchCurrentPrice(coin) {
@@ -581,16 +593,11 @@
                 if (!response.ok) throw new Error(`Error en la API: ${response.statusText}`);
                 const data = await response.json();
 
-                // Ajustar el número de decimales según la moneda
+                  // Ajustar el número de decimales según la moneda
                 const decimalPlaces = (coin === "FTMUSDT" || coin === "POPCATUSDT" || coin === "LQTYUSDT" || coin === "DOGSUSDT"|| coin === "TONUSDT"|| coin === "SHIBUSDT" || coin === "DOGEUSDT") ? 4 : 2;
-
-                const currentPrice = parseFloat(data.price).toFixed(4);
-                document.getElementById("price").innerText = `Precio actual: $${currentPrice}`;
+        
+                document.getElementById("price").innerText = `Precio actual: $${parseFloat(data.price).toFixed(4)}`;
                 updateChart(parseFloat(data.price));
-
-                // Verificar CHoCH
-                checkCHoCH(historicalPrices, parseFloat(data.price));
-
             } catch (error) {
                 console.error("Error:", error);
             }
@@ -617,7 +624,7 @@
             }
         }
 
-        async function updateIndicators() {
+       async function updateIndicators() {
             const coin = document.getElementById("coin").value;
             const interval = document.getElementById("interval").value;
             const apiURL = `https://api.binance.com/api/v3/klines?symbol=${coin}&interval=${interval}&limit=100`;
@@ -626,6 +633,8 @@
                 const response = await fetch(apiURL);
                 if (!response.ok) throw new Error(`Error en la API: ${response.statusText}`);
                 const data = await response.json();
+
+                const decimalPlaces = (coin === "FTMUSDT" || coin === "POPCATUSDT" || coin === "LQTYUSDT" || coin === "DOGSUSDT" || coin === "TONUSDT" || coin === "SHIBUSDT" || coin === "DOGEUSDT") ? 4 : 2;
 
                 historicalPrices = data.map(item => parseFloat(item[4])); // Precio de cierre
 
@@ -636,7 +645,6 @@
                 document.getElementById("high").innerText = `Máximo: $${high.toFixed(4)}`;
                 document.getElementById("low").innerText = `Mínimo: $${low.toFixed(4)}`;
                 document.getElementById("volume").innerText = `Volumen en 24h: ${volume.toFixed(4)}`;
-
 
                 // Calcular indicadores si hay suficientes datos
                 const sma = calculateSMA(historicalPrices, 14);
@@ -668,7 +676,6 @@
                 console.error("Error:", error);
             }
         }
-
 
         async function fetchNews() {
             const newsApiKey = '6b7b0f8817d34d31b6cb59a8c7e40e54'; // Cambia esta clave si es necesario
@@ -786,72 +793,6 @@
             ];
         }
 
-        // Función para calcular el RSI
-function calculateRSI(prices, period = 14) {
-    let gains = 0;
-    let losses = 0;
-    let avgGain, avgLoss;
-
-    // Calcular cambios de precios
-    for (let i = 1; i < prices.length; i++) {
-        const change = prices[i] - prices[i - 1];
-        if (change > 0) {
-            gains += change;
-        } else {
-            losses -= change; // Convertir pérdidas a valores positivos
-        }
-    }
-
-    // Promedios
-    avgGain = gains / period;
-    avgLoss = losses / period;
-
-    // Calcular el RS
-    const rs = avgGain / avgLoss;
-    
-    // Calcular el RSI
-    return 100 - (100 / (1 + rs));
-}
-
-// Función principal para comprobar CHoCH
-function checkCHoCH(historicalPrices, currentPrice) {
-    if (historicalPrices.length < 14) return; // Asegurar que haya suficientes datos para el RSI
-
-    const prevPrice = historicalPrices[historicalPrices.length - 2];
-    const prevLow = Math.min(...historicalPrices.slice(-3));
-    const prevHigh = Math.max(...historicalPrices.slice(-3));
-
-    // Calcular RSI
-    const rsi = calculateRSI(historicalPrices.slice(-14)); // Usamos los últimos 14 precios para el RSI
-
-    let chochSignal = "Neutro";
-
-    // Condición CHoCH para cambio de alcista a bajista
-    if (prevPrice > prevHigh && currentPrice < prevLow) {
-        chochSignal = "CHoCH detectado: Cambio a tendencia bajista.";
-        
-        // Añadir condición de sobrecompra
-        if (rsi > 70) {
-            chochSignal += " (RSI indica sobrecompra)";
-        }
-    }
-    // Condición CHoCH para cambio de bajista a alcista
-    else if (prevPrice < prevLow && currentPrice > prevHigh) {
-        chochSignal = "CHoCH detectado: Cambio a tendencia alcista.";
-        
-        // Añadir condición de sobreventa
-        if (rsi < 30) {
-            chochSignal += " (RSI indica sobreventa)";
-        }
-    }
-
-    if (chochSignal) {
-        document.getElementById("choch").innerText = chochSignal;
-    }
-}
-
-
-
         async function analyzeNews() {
             const newsApiKey = '6b7b0f8817d34d31b6cb59a8c7e40e54'; // Cambia esta clave si es necesario
             const newsApiURL = `https://newsapi.org/v2/everything?q=cryptocurrency&from=2024-10-01&apiKey=${newsApiKey}`;
@@ -901,7 +842,7 @@ function checkCHoCH(historicalPrices, currentPrice) {
                 prediction = "Tendencia bajista.";
             }
             
-            return `Predicción : ${prediction}`;
+            return `Predicción del mercado: ${prediction}`;
         }
         
 
@@ -1030,6 +971,7 @@ function checkCHoCH(historicalPrices, currentPrice) {
         document.getElementById("startButton").addEventListener("click", function() {
             saveUserPreferences(); // Guarda preferencias
             fetchMarketData(); // Obtiene datos del mercado
+            // Aquí podrías agregar lógica para actualizaciones en tiempo real o countdown
         });
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -1038,7 +980,6 @@ function checkCHoCH(historicalPrices, currentPrice) {
         });
         
     </script>
-
      <script>
         async function obtenerDatosHistoricos(cripto, intervalo, fechaInicio, fechaFin) {
             const url = `https://api.binance.com/api/v3/klines?symbol=${cripto}&interval=${intervalo}&startTime=${fechaInicio}&endTime=${fechaFin}&limit=1000`;
@@ -1162,8 +1103,6 @@ function checkCHoCH(historicalPrices, currentPrice) {
             mostrarHorariosMercados(); // Cargar horarios al inicio
         });
     </script>
-
-    
 </body>
 </html>
 
