@@ -1052,39 +1052,47 @@
         }
 
         function mostrarHorariosMercados() {
-            const marketTimes = [
-                { mercado: 'Nueva York (EE. UU.)', apertura: '09:30', cierre: '16:00', zonaHoraria: 'America/New_York', icono: '🏙️' },
-                { mercado: 'Londres (Reino Unido)', apertura: '08:00', cierre: '16:30', zonaHoraria: 'Europe/London', icono: '🌆' },
-                { mercado: 'Tokio (Japón)', apertura: '09:00', cierre: '15:00', zonaHoraria: 'Asia/Tokyo', icono: '🏯' },
-                { mercado: 'Sídney (Australia)', apertura: '10:00', cierre: '16:00', zonaHoraria: 'Australia/Sydney', icono: '🌇' }
-            ];
+    const marketTimes = [
+        { mercado: 'Nueva York (EE. UU.)', apertura: '09:30', cierre: '16:00', zonaHoraria: 'America/New_York', icono: '🏙️' },
+        { mercado: 'Londres (Reino Unido)', apertura: '08:00', cierre: '16:30', zonaHoraria: 'Europe/London', icono: '🌆' },
+        { mercado: 'Tokio (Japón)', apertura: '09:00', cierre: '15:00', zonaHoraria: 'Asia/Tokyo', icono: '🏯' },
+        { mercado: 'Sídney (Australia)', apertura: '10:00', cierre: '16:00', zonaHoraria: 'Australia/Sydney', icono: '🌇' }
+    ];
 
-            const horariosElement = document.getElementById('market-hours-list');
-            horariosElement.innerHTML = '';
+    const horariosElement = document.getElementById('market-hours-list');
+    horariosElement.innerHTML = '';
 
-            const ahora = new Date();
+    // Hora actual en UTC
+    const ahoraUTC = new Date();
 
-            marketTimes.forEach(market => {
-                const aperturaLocal = new Date(ahora.toLocaleString("en-US", { timeZone: market.zonaHoraria }));
-                aperturaLocal.setHours(market.apertura.split(':')[0], market.apertura.split(':')[1]);
+    marketTimes.forEach(market => {
+        // Hora de apertura y cierre en la zona horaria específica del mercado
+        const aperturaLocal = new Date(ahoraUTC.toLocaleString("en-US", { timeZone: market.zonaHoraria }));
+        aperturaLocal.setHours(market.apertura.split(':')[0], market.apertura.split(':')[1]);
 
-                const cierreLocal = new Date(ahora.toLocaleString("en-US", { timeZone: market.zonaHoraria }));
-                cierreLocal.setHours(market.cierre.split(':')[0], market.cierre.split(':')[1]);
+        const cierreLocal = new Date(ahoraUTC.toLocaleString("en-US", { timeZone: market.zonaHoraria }));
+        cierreLocal.setHours(market.cierre.split(':')[0], market.cierre.split(':')[1]);
 
-                const abierto = ahora >= aperturaLocal && ahora <= cierreLocal;
-                const color = abierto ? 'abierto' : 'cerrado';
+        // Hora actual en la zona horaria del mercado
+        const ahoraLocal = new Date(ahoraUTC.toLocaleString("en-US", { timeZone: market.zonaHoraria }));
 
-                const li = document.createElement('li');
-                li.className = 'market-card';
-                li.innerHTML = `
-                    <div class="market-icon">${market.icono}</div>
-                    <h4>${market.mercado}</h4>
-                    <div class="market-status ${color}">${abierto ? 'Abierto' : 'Cerrado'}</div>
-                    <div class="time">Apertura: ${market.apertura} | Cierre: ${market.cierre}</div>
-                `;
-                horariosElement.appendChild(li);
-            });
-        }
+        // Determinar si el mercado está abierto o cerrado
+        const abierto = ahoraLocal >= aperturaLocal && ahoraLocal <= cierreLocal;
+        const color = abierto ? 'abierto' : 'cerrado';
+
+        // Crear y agregar los elementos al DOM
+        const li = document.createElement('li');
+        li.className = 'market-card';
+        li.innerHTML = `
+            <div class="market-icon">${market.icono}</div>
+            <h4>${market.mercado}</h4>
+            <div class="market-status ${color}">${abierto ? 'Abierto' : 'Cerrado'}</div>
+            <div class="time">Apertura: ${market.apertura} | Cierre: ${market.cierre}</div>
+        `;
+        horariosElement.appendChild(li);
+    });
+}
+
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('calcular').addEventListener('click', function() {
