@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PMMLPro</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500&display=swap');
 
         * {
             margin: 0;
@@ -78,15 +79,16 @@
         }
         .btn {
             width: 100%;
-            padding: 10px;
+            padding: 5px;
             background: linear-gradient(45deg, #09ffcf, #0e72ec);
             color: #0a0f1e;
-            font-size: 18px;
+            font-size: 14px;
             font-family: 'Orbitron', sans-serif;
             border: none;
             cursor: pointer;
             border-radius: 10px;
             transition: all 0.3s ease;
+            margin-bottom: 20px;
         }
 
         .btn:hover {
@@ -318,6 +320,11 @@
     grid-template-columns: repeat(2, 1fr); /* 4 columnas iguales */
     gap: 10px; /* Espacio entre las señales */
 }
+    .dos3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 4 columnas iguales */
+    gap: 10px; /* Espacio entre las señales */
+}
     
 .tiemp, .subidas {
     display: grid;
@@ -328,12 +335,65 @@
 /* Estilos para cada widget */
 #tradingview_widget_container {
     width: 100%;
-    height: 300px;
+    height: 280px;
     overflow: hidden;
     border: none;
 }
-
+.iframe-container1 {
+    width: 100%;
+    max-width: 1920px;
+    height: 170px;
+    border: none;
+    /* Sin borde */
+    margin: 1;
+    align-font: center;
+    padding: 1px;
+    margin: 0 auto;
+}
+iframe {
+    width: 100%;
+    max-width: 1920px;
+    height: 100%;
+    border: none;
+    /* Sin borde */
+    margin: 1;
+    align-font: center;
+    padding: 1px;
+    margin: 0 auto;
+}
+.iframe-container {
+    width: 100%;
+    max-width: 1920px;
+    height: 300px;
+    border: none;
+    /* Sin borde */
+    margin: 1;
+    align-font: center;
+    padding: 1px;
+    margin: 0 auto;
+}
+        .hls {
+            background-color: #1e1e2f;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 255, 128, 0.3);
+            border-radius: 8px;
+            padding: 5px;
+            text-align: center;
+            border-left: 5px solid #00e6d7;
+            transition: transform 0.3s ease;
+            height: 130px;
+            font-size: 14px;            
+        }
+/* Estilo para la hora local */
+        .local-time {
+            margin-top: 10px;
+            font-size: 15px;
+            color: #b0bec5;
+            text-align: center;
+        }        
+    
     </style>
+
     <style>
         body { font-family: Arial, sans-serif; }
         #prediction { margin-top: 20px; font-size: 1.2em; }
@@ -343,7 +403,7 @@
 </head>
 <body>
     <div class="container">
-    <div class="dos">
+    <div class="dos3">
         <select id="coin" class="input">
             <option value="BTCUSDT">Bitcoin (BTC/USDT)</option>
             <option value="ETHUSDT">Ethereum (ETH/USDT)</option>
@@ -364,7 +424,7 @@
             <option value="DOGSUSDT">DOGS (DOGS/USDT)</option>
             <option value="TRXUSDT">TRON (TRX/USDT)</option>
             <option value="SHIBUSDT">SHIBCoin (SHIB/USDT)</option>
-            <option value="ZETAUSDT">ZETA Coin (ZETA/USDT)</option>
+            <option value="SUIUSDT">SUI (SUI/USDT)</option>
         </select>
         <select id="interval" class="input">
             <option value="1m">1 minuto</option>
@@ -375,11 +435,12 @@
             <option value="1d">1 día</option>
             
         </select>
+        <button class="btn" id="fetchDataBtn" onclick="startFetching()">Análizar</button>
+
         </div>
 
-        <button class="btn" id="fetchDataBtn" onclick="startFetching()">Comenzar Análisis</button>
-
-
+    
+        
 
         <div class="result" id="result">
             <div class="dos">
@@ -389,10 +450,12 @@
             </div>
 
             <!-- Contenedor para el widget de TradingView -->
-            <div id="tradingview_widget_container" style="width: 100%; height: 300px;"></div>
+            <div id="tradingview_widget_container" style="width: 100%; height: 250px;"></div>
 
-            <div id="prediction">Predicción: Cargando...</div>
-
+            
+            <div class="iframe-container1">
+                <iframe src="https://andres28m.github.io/minichoch/"></iframe>
+            </div>
           
             <div class="signals" id="signals">Señales: Cargando...</div>
             <!--
@@ -401,6 +464,13 @@
                 <div id="asks">Órdenes de Venta: Cargando...</div>
             </div>
             -->
+            <div class="iframe-container">
+            <iframe src="https://es.cointelegraph.com/">
+             Tu navegador no soporta iframes.
+            </iframe>
+            </div>
+            
+           <div id="prediction">Predicción: Cargando...</div>
             <div class="subidas">
                 <div id="low">Mínimo: Cargando...</div>
                 <div id="high">Máximo: Cargando...</div>
@@ -470,7 +540,15 @@
             
             <ul id="market-hours-list"></ul>
         </div>
-
+        
+        <div class="hls">
+    <!-- Contenedores para mostrar la hora local de cada mercado -->
+    <div class="local-time" id="nyMarket"></div>
+    <div class="local-time" id="londonMarket"></div>
+    <div class="local-time" id="tokyoMarket"></div>
+    <div class="local-time" id="sydneyMarket"></div>
+    </div>
+        
         <br>
     
      </div>  
@@ -503,7 +581,7 @@
                 "hotlist": true,
                 "calendar": false,
                 "autosize": true,
-                "studies": ["MASimple@tv-basicstudies"]
+                "studies": ["MASimple@tv-basicstudies", "STD;Divergence%1Indicator"]
             });
         }
     
@@ -914,6 +992,7 @@
                                 borderWidth: 1,
                                 fill: false,
                             },
+                            
                         ]
                     },
                     options: {
@@ -941,7 +1020,7 @@
             const emaValue = calculateEMA(historicalPrices, 14);
             chartInstance.data.datasets[1].data.push(smaValue);
             chartInstance.data.datasets[2].data.push(emaValue);
-
+            
             // Actualiza la gráfica
             chartInstance.update();
         }
@@ -1093,6 +1172,30 @@
     });
 }
 
+        function displayMarketHours() {
+            const localTime = new Date();
+            const nyTime = new Date(localTime.toLocaleString("en-US", { timeZone: "America/New_York" }));
+            const londonTime = new Date(localTime.toLocaleString("en-US", { timeZone: "Europe/London" }));
+            const tokyoTime = new Date(localTime.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+            const sydneyTime = new Date(localTime.toLocaleString("en-US", { timeZone: "Australia/Sydney" }));
+
+            document.getElementById("nyMarket").textContent = `Nueva York: ${nyTime.toLocaleTimeString()} (Diferencia: ${nyTime.getHours() - localTime.getHours()} horas)`;
+            document.getElementById("londonMarket").textContent = `Londres: ${londonTime.toLocaleTimeString()} (Diferencia: ${londonTime.getHours() - localTime.getHours()} horas)`;
+            document.getElementById("tokyoMarket").textContent = `Tokio: ${tokyoTime.toLocaleTimeString()} (Diferencia: ${tokyoTime.getHours() - localTime.getHours()} horas)`;
+            document.getElementById("sydneyMarket").textContent = `Sídney: ${sydneyTime.toLocaleTimeString()} (Diferencia: ${sydneyTime.getHours() - localTime.getHours()} horas)`;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            mostrarHorariosMercados();
+            displayMarketHours();
+
+            // Actualizar cada minuto
+            setInterval(() => {
+                mostrarHorariosMercados();
+                displayMarketHours();
+            }, 60000);
+        });
+
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('calcular').addEventListener('click', function() {
@@ -1113,8 +1216,4 @@
     </script>
 </body>
 </html>
-
-
-
-
 
