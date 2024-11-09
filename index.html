@@ -47,10 +47,10 @@
             color: #d4f1ff;
             font-size: 14px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .input-section, .result, .indicators, .signals, .movimiento, .market-hours {
-            margin-bottom: 10px;
+            margin-bottom: 1px;
             padding: 5px;
             background-color: #2a2a2a;
             border: 1px solid #444;
@@ -88,7 +88,7 @@
             cursor: pointer;
             border-radius: 10px;
             transition: all 0.3s ease;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .btn:hover {
@@ -106,7 +106,7 @@
         
         .signals {
             max-width: 100%;
-            padding: 10px;
+            padding: 5px;
             text-align: center;
             font-size: 18px;
             border: 1px solid #828181;
@@ -678,7 +678,7 @@ iframe {
                   // Ajustar el número de decimales según la moneda
                 const decimalPlaces = (coin === "FTMUSDT" || coin === "POPCATUSDT" || coin === "LQTYUSDT" || coin === "DOGSUSDT"|| coin === "TONUSDT"|| coin === "SHIBUSDT" || coin === "DOGEUSDT") ? 4 : 2;
         
-                document.getElementById("price").innerText = `Precio actual: $${parseFloat(data.price).toFixed(4)}`;
+                document.getElementById("price").innerText = `$${parseFloat(data.price).toFixed(4)}`;
                 updateChart(parseFloat(data.price));
             } catch (error) {
                 console.error("Error:", error);
